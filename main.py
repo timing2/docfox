@@ -1,45 +1,38 @@
+from pathlib import Path
 import flet as ft
 
-md1 = """
-Installation
-------------
-
-Be aware, the installation needs technical skills and is not for beginners. Please do not open platform and installation related issues on GitHub. We have a very helpful [Discord](https://join.facefusion.io) community that will guide you to complete the installation.
-
-Get started with the [installation](https://docs.facefusion.io/installation) guide.
-
-
-Usage
------
-
-Run the command:
-
-```
-python run.py [options]
-
-options:
-  -h, --help                                                                                                         show this help message and exit
-  -s SOURCE_PATHS, --source SOURCE_PATHS                                                                             select a source image
-  -t TARGET_PATH, --target TARGET_PATH                                                                               select a target image or video
-  -o OUTPUT_PATH, --output OUTPUT_PATH                                                                               specify the output file or directory
-  -v, --version                                                                                                      show program's version number and exit
-```
-"""
-
-
 def main(page: ft.Page):
-    page.theme_mode = "light"
+    page.theme_mode = ft.ThemeMode.LIGHT
     page.scroll = "auto"
-    page.add(ft.Image(src=f"/assets/icon.png"))
-    page.add(ft.SafeArea(ft.Text("Hello, DocVamp!")))
-    page.add(
-        ft.Markdown(
-            md1,
-            selectable=True,
-            extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
-            on_tap_link=lambda e: page.launch_url(e.data),
+
+    def changetheme(e):
+        page.theme_mode = "light" if page.theme_mode == "dark" else "dark"
+        #page.update()
+        # CHANGE THE ICON DARK MODE OR LIGHT MODE
+        toggledarklight.selected = not toggledarklight.selected
+        # AND PAGE UPDATE FOR CHANGE STATE
+        page.update() 
+
+    toggledarklight = ft.IconButton(
+        on_click=changetheme,
+        icon="LIGHT_MODE_OUTLINED",
+        selected_icon="NIGHTLIGHT_OUTLINED",
+        icon_color="#222222",
+        selected_icon_color="#eeeeee"
         )
+
+    page.appbar = ft.AppBar(
+        toolbar_height=60,
+        leading=ft.Image(src=f"icon.png"),
+        leading_width=80,
+        title=ft.TextButton(text="Text button"),
+        center_title=False,
+        bgcolor=ft.colors.SURFACE_VARIANT,
+        actions=[toggledarklight],
     )
+
+
+    page.add(ft.Image(src=f"icon.png", width=100))
 
 # run app
 ft.app(
