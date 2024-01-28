@@ -3,7 +3,7 @@ import flet as ft
 
 import configparser
 
-""" Root path """
+""" Root path """ 
 root_path = Path(__file__).resolve().parent
 
 
@@ -17,10 +17,12 @@ logo_width = config['appbar']['logo_width']
 appbar_height = config['appbar']['appbar_height']
 menu_alignment = config['appbar']['menu_alignment']
 appbar_text_size = config['appbar']['appbar_text_size']
+leftbar_width = config['leftbar']['leftbar_width']
 footer_text = config['footer']['footer_text']
 footer_text_size = config['footer']['footer_text_size']
 footer_alignment = config['footer']['footer_alignment']
 footer_height = config['footer']['footer_height']
+font_color = ft.colors.INVERSE_SURFACE
 
 
 def main(page: ft.Page):
@@ -48,11 +50,7 @@ def main(page: ft.Page):
         controls=[
             ft.TextButton(content=ft.Text(value="Documentation", size=appbar_text_size)),
             ft.TextButton(content=ft.Text(value="Page 1", size=appbar_text_size)),
-            ft.TextButton(
-                content=ft.Text(value="GitHub", size=appbar_text_size),
-                url="https://github.com/timing2/docvamp",
-                url_target="_blank"
-            ),
+            ft.TextButton(content=ft.Text(value="Page 2", size=appbar_text_size)),
         ]
     )
 
@@ -68,10 +66,28 @@ def main(page: ft.Page):
     )
 
 
-    left_bar = ft.Column(
-        controls=[
-            ft.TextButton(content=ft.Text(value="Documentation", size=appbar_text_size))
-        ]
+    left_bar = ft.Column([
+            ft.Divider(height=10, thickness=0, opacity=0),
+            ft.Text("Introduction", size=appbar_text_size, color=font_color),
+            ft.Divider(height=0, thickness=2, opacity=0.3),  
+            ft.TextButton("Get started"),   
+            ft.TextButton("Requirements"),
+
+            ft.Divider(height=10, thickness=0, opacity=0),
+            ft.Text("Usage", size=appbar_text_size, color=font_color),
+            ft.Divider(height=0, thickness=2, opacity=0.3),  
+            ft.TextButton("Pages"),   
+            ft.TextButton("Documentation"),
+
+            ft.Divider(height=10, thickness=0, opacity=0),
+            ft.Text("External links", size=appbar_text_size, color=font_color),
+            ft.Divider(height=0, thickness=2, opacity=0.3),  
+            ft.TextButton("Github", icon="link", url="https://github.com/timing2/docvamp", url_target="_blank"),   
+            ft.TextButton("Flet", icon="link", url="https://flet.dev/docs/", url_target="_blank"),
+        ],
+        spacing=10,
+        width=leftbar_width,
+        expand=False,
     )
 
 
