@@ -3,7 +3,7 @@ import flet as ft
 
 import configparser
 
-""" Root path """ 
+""" Root path """
 root_path = Path(__file__).resolve().parent
 
 
@@ -26,10 +26,10 @@ font_color = ft.colors.INVERSE_SURFACE
 
 
 def main(page: ft.Page):
-    page.theme_mode = ft.ThemeMode.LIGHT
+    page.theme_mode = ft.ThemeMode.SYSTEM
 
     def changetheme(e):
-        page.theme_mode = "light" if page.theme_mode == "dark" else "dark"
+        page.theme_mode = ft.ThemeMode.DARK if page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
         #page.update()
         # CHANGE THE ICON DARK MODE OR LIGHT MODE
         toggledarklight.selected = not toggledarklight.selected
@@ -38,12 +38,9 @@ def main(page: ft.Page):
 
     toggledarklight = ft.IconButton(
         on_click=changetheme,
-        icon="LIGHT_MODE_OUTLINED",
-        selected_icon="NIGHTLIGHT_OUTLINED",
-        icon_color="#222222",
-        selected_icon_color="#eeeeee"
+        icon="NIGHTLIGHT_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "LIGHT_MODE_OUTLINED",
+        selected_icon="LIGHT_MODE_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "NIGHTLIGHT_OUTLINED", 
         )
-
 
     menu = ft.Row(
         alignment=menu_alignment,
@@ -85,9 +82,11 @@ def main(page: ft.Page):
             ft.TextButton("Github", icon="link", url="https://github.com/timing2/docvamp", url_target="_blank"),   
             ft.TextButton("Flet", icon="link", url="https://flet.dev/docs/", url_target="_blank"),
         ],
-        spacing=10,
+        spacing=5,
         width=leftbar_width,
         expand=False,
+        alignment="start",
+        scroll="auto"
     )
 
 
@@ -112,13 +111,57 @@ def main(page: ft.Page):
         ),
     )
 
+
+    # code_textfield
+    codeblock = ft.TextField(
+        text_size = 14,
+        read_only=True,
+        bgcolor="#161B22",
+        color="white",
+        content_padding=10,
+        multiline=True,
+        disabled=False,
+        value="""
+import flet
+from flet import IconButton, Page, Row, TextField, icons
+
+def main(page: Page):
+    page.title = "Flet counter example"
+    page.vertical_alignment = "center"
+
+    txt_number = TextField(value="0", text_align="right", width=100)
+
+    def minus_click(e):
+        txt_number.value = str(int(txt_number.value) - 1)
+        page.update()
+
+    def plus_click(e):
+        txt_number.value = str(int(txt_number.value) + 1)
+        page.update()
+
+    page.add(
+        Row(
+            [
+                IconButton(icons.REMOVE, on_click=minus_click),
+                txt_number,
+                IconButton(icons.ADD, on_click=plus_click),
+            ],
+            alignment="center",
+        )
+    )
+
+flet.app(target=main)""",
+            )
+
+    
     page.add(
         ft.Row(
             [
                 left_bar,
                 ft.VerticalDivider(width=1),
                 ft.Column([
-                        ft.Image(src=f"icon.png"),
+                        markdown,
+                        codeblock,
                         markdown
                     ], 
                     alignment=ft.MainAxisAlignment.START, 
@@ -127,6 +170,8 @@ def main(page: ft.Page):
                 ),
             ],
             expand=True,
+            vertical_alignment="start",
+
         )
     )
 
