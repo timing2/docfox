@@ -13,11 +13,15 @@ config = configparser.ConfigParser()
 
 # Read the configuration file
 config.read(root_path / 'config.ini')
-
-# Accessing values from the 'DEFAULT' section
 logo_width = config['appbar']['logo_width']
+appbar_height = config['appbar']['appbar_height']
 menu_alignment = config['appbar']['menu_alignment']
-""" """  """ """ 
+appbar_text_size = config['appbar']['appbar_text_size']
+footer_text = config['footer']['footer_text']
+footer_text_size = config['footer']['footer_text_size']
+footer_alignment = config['footer']['footer_alignment']
+footer_height = config['footer']['footer_height']
+
 
 def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -42,20 +46,20 @@ def main(page: ft.Page):
     menu = ft.Row(
         alignment=menu_alignment,
         controls=[
-            ft.TextButton(content=ft.Text(value="Documentation", size=16)),
-            ft.TextButton(content=ft.Text(value="Page 1", size=16)),
+            ft.TextButton(content=ft.Text(value="Documentation", size=appbar_text_size)),
+            ft.TextButton(content=ft.Text(value="Page 1", size=appbar_text_size)),
             ft.TextButton(
-                content=ft.Text(value="GitHub", size=16),
+                content=ft.Text(value="GitHub", size=appbar_text_size),
                 url="https://github.com/timing2/docvamp",
                 url_target="_blank"
             ),
         ]
     )
 
- 
+
     page.appbar = ft.AppBar(
-        toolbar_height=60,
-        leading=ft.Image(src=f"icon.png"),
+        toolbar_height=appbar_height,
+        leading=ft.Image(src=f"icon.png"), 
         title=menu,
         leading_width=logo_width,        
         center_title=False,
@@ -64,31 +68,12 @@ def main(page: ft.Page):
     )
 
 
-    rail = ft.NavigationRail(
-        selected_index=0,
-        label_type=ft.NavigationRailLabelType.ALL,
-        # extended=True,
-        min_width=100,
-        min_extended_width=400,
-        leading=ft.FloatingActionButton(icon=ft.icons.CREATE, text="Add"),
-        group_alignment=-0.9,
-        destinations=[
-            ft.NavigationRailDestination(
-                icon=ft.icons.FAVORITE_BORDER, selected_icon=ft.icons.FAVORITE, label="First"
-            ),
-            ft.NavigationRailDestination(
-                icon_content=ft.Icon(ft.icons.BOOKMARK_BORDER),
-                selected_icon_content=ft.Icon(ft.icons.BOOKMARK),
-                label="Second",
-            ),
-            ft.NavigationRailDestination(
-                icon=ft.icons.SETTINGS_OUTLINED,
-                selected_icon_content=ft.Icon(ft.icons.SETTINGS),
-                label_content=ft.Text("Settings"),
-            ),
-        ],
-        on_change=lambda e: print("Selected destination:", e.control.selected_index),
+    left_bar = ft.Column(
+        controls=[
+            ft.TextButton(content=ft.Text(value="Documentation", size=appbar_text_size))
+        ]
     )
+
 
     md_file = root_path / "documentation" / "Markdownexample.md"
     with open(md_file, "r", encoding="utf-8") as f:
@@ -99,11 +84,22 @@ def main(page: ft.Page):
             extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
             on_tap_link=lambda e: page.launch_url(e.data),
         )
+    
+    page.bottom_appbar = ft.BottomAppBar(
+        height=footer_height,
+        bgcolor=ft.colors.ON_INVERSE_SURFACE,
+        content=ft.Row(
+            alignment=footer_alignment,
+            controls=[
+                ft.Text(footer_text, size=footer_text_size),
+            ]
+        ),
+    )
 
     page.add(
         ft.Row(
             [
-                rail,
+                left_bar,
                 ft.VerticalDivider(width=1),
                 ft.Column([
                         ft.Image(src=f"icon.png"),
