@@ -11,15 +11,15 @@ root_path = Path(__file__).resolve().parent
 # Create a ConfigParser object
 config = configparser.ConfigParser()
 
-# Read the configuration file
-config.read(root_path / 'config.ini')
-logo_width = config['appbar']['logo_width']
-appbar_height = config['appbar']['appbar_height']
-menu_alignment = config['appbar']['menu_alignment']
-appbar_text_size = config['appbar']['appbar_text_size']
-leftbar_width = config['leftbar']['leftbar_width']
+# Read the configuration file 
+config.read(root_path / 'config.ini', encoding='utf-8')
+logo_width = config['top_bar']['logo_width']
+appbar_height = config['top_bar']['top_bar_height']
+menu_alignment = config['top_bar']['menu_alignment']
+appbar_text_size = config['top_bar']['top_bar_text_size']
+leftbar_width = config['general']['leftbar_width']
+max_content_width = config['general']['max_content_width']
 footer_text = config['footer']['footer_text']
-footer_text_size = config['footer']['footer_text_size']
 footer_alignment = config['footer']['footer_alignment']
 footer_height = config['footer']['footer_height']
 font_color = ft.colors.INVERSE_SURFACE
@@ -28,6 +28,34 @@ font_color = ft.colors.INVERSE_SURFACE
 def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.SYSTEM
 
+    # content spacing 
+    left_content_spacer = ft.Container()
+    right_content_spacer = ft.Container()
+
+    def adjust_content_spacing(width):
+        total_content_width = int(leftbar_width) + int(max_content_width)
+        if width < total_content_width:
+            left_spacer = 0
+            right_spacer = 0
+        else:
+            total_spacer = width - total_content_width
+
+            right_spacer = (total_spacer + int(leftbar_width)) / 2
+            left_spacer = right_spacer - int(leftbar_width)
+
+        left_content_spacer.width = left_spacer
+        right_content_spacer.width = right_spacer
+        page.update()
+    
+    adjust_content_spacing(page.window_width)
+    def page_resize(e):
+        print("New page size:", page.window_width, page.window_height)
+        adjust_content_spacing(page.window_width)       
+
+    page.on_resize = page_resize 
+
+
+    # Change theme
     def changetheme(e):
         page.theme_mode = ft.ThemeMode.DARK if page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
         #page.update()
@@ -42,6 +70,8 @@ def main(page: ft.Page):
         selected_icon="LIGHT_MODE_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "NIGHTLIGHT_OUTLINED", 
         )
 
+
+    # Top bar
     menu = ft.Row(
         alignment=menu_alignment,
         controls=[
@@ -50,7 +80,6 @@ def main(page: ft.Page):
             ft.TextButton(content=ft.Text(value="Page 2", size=appbar_text_size)),
         ]
     )
-
 
     page.appbar = ft.AppBar(
         toolbar_height=appbar_height,
@@ -63,33 +92,34 @@ def main(page: ft.Page):
     )
 
 
+    # Left bar
     left_bar = ft.Column([
             ft.Divider(height=10, thickness=0, opacity=0),
             ft.Text("Introduction", size=appbar_text_size, color=font_color),
-            ft.Divider(height=0, thickness=2, opacity=0.3),  
+            #ft.Divider(height=0, thickness=2, opacity=0.3),  
             ft.TextButton("Get started"),   
             ft.TextButton("Requirements"),
 
             ft.Divider(height=10, thickness=0, opacity=0),
             ft.Text("Usage", size=appbar_text_size, color=font_color),
-            ft.Divider(height=0, thickness=2, opacity=0.3),  
+            #ft.Divider(height=0, thickness=2, opacity=0.3),  
             ft.TextButton("Pages"),   
             ft.TextButton("Documentation"),
 
             ft.Divider(height=10, thickness=0, opacity=0),
             ft.Text("External links", size=appbar_text_size, color=font_color),
-            ft.Divider(height=0, thickness=2, opacity=0.3),  
+            #ft.Divider(height=0, thickness=2, opacity=0.3),  
             ft.TextButton("Github", icon="link", url="https://github.com/timing2/docvamp", url_target="_blank"),   
             ft.TextButton("Flet", icon="link", url="https://flet.dev/docs/", url_target="_blank"),
         ],
         spacing=5,
-        width=leftbar_width,
+        width=leftbar_width, 
         expand=False,
         alignment="start",
-        scroll="auto"
+        scroll="always",
     )
 
-
+    # MD content (need to edit)
     md_file = root_path / "documentation" / "Markdownexample.md"
     with open(md_file, "r", encoding="utf-8") as f:
         md1 = f.read()
@@ -100,13 +130,20 @@ def main(page: ft.Page):
             on_tap_link=lambda e: page.launch_url(e.data),
         )
     
+
+    # Footer
     page.bottom_appbar = ft.BottomAppBar(
         height=footer_height,
         bgcolor=ft.colors.ON_INVERSE_SURFACE,
         content=ft.Row(
             alignment=footer_alignment,
             controls=[
-                ft.Text(footer_text, size=footer_text_size),
+                ft.Markdown(
+                    footer_text,
+                    selectable=True,
+                    extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
+                    on_tap_link=lambda e: page.launch_url(e.data),
+                )
             ]
         ),
     )
@@ -153,27 +190,30 @@ def main(page: Page):
 flet.app(target=main)""",
             )
 
-    
+    # Add content to page
     page.add(
-        ft.Row(
-            [
-                left_bar,
-                ft.VerticalDivider(width=1),
-                ft.Column([
-                        markdown,
-                        codeblock,
-                        markdown
-                    ], 
-                    alignment=ft.MainAxisAlignment.START, 
-                    expand=True,
-                    scroll="auto"
-                ),
-            ],
-            expand=True,
-            vertical_alignment="start",
+            ft.Row(
+                [
+                    left_bar,
+                    ft.VerticalDivider(width=1, opacity=0.3),
+                    left_content_spacer,                         
+                    ft.Column([
+                            markdown,
+                            codeblock,
+                            markdown
+                        ], 
+                        alignment=ft.MainAxisAlignment.START, 
+                        expand=True,
+                        scroll="auto",
+                    ),  
+                    right_content_spacer,                     
+                ],
+                expand=True,
+                vertical_alignment="start",
 
-        )
+            )
     )
+
 
 # run app
 ft.app(
