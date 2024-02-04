@@ -12,14 +12,14 @@ root_path = Path(__file__).resolve().parent
 config = configparser.ConfigParser()
 
 # Read the configuration file 
-config.read(root_path / 'config.ini', encoding='utf-8')
+config.read(root_path / 'settings.ini', encoding='utf-8')
+leftbar_width = config['general']['leftbar_width']
+docs_page_title = config['general']['docs_page_title']
 logo_width = config['top_bar']['logo_width']
 appbar_height = config['top_bar']['top_bar_height']
 menu_alignment = config['top_bar']['menu_alignment']
 appbar_text_size = config['top_bar']['top_bar_text_size']
 docs_button_text = config['top_bar']['docs_button_text']
-leftbar_width = config['general']['leftbar_width']
-max_content_width = config['general']['max_content_width']
 footer_text = config['footer']['footer_text']
 footer_alignment = config['footer']['footer_alignment']
 footer_height = config['footer']['footer_height']
@@ -28,33 +28,20 @@ font_color = ft.colors.INVERSE_SURFACE
 
 def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.SYSTEM
+    page.title = docs_page_title
 
-    # content spacing 
-    left_content_spacer = ft.Container()
-    right_content_spacer = ft.Container()
+    #routing
+    """ def route_change(e: ft.RouteChangeEvent): 
+        page.add(ft.Text(f"New route: {e.route}"))
 
-    def adjust_content_spacing(width):
-        total_content_width = int(leftbar_width) + int(max_content_width)
-        print('Content width:', total_content_width)
-        if width < total_content_width + 50:
-            left_spacer = 0
-            right_spacer = 0
-        else:
-            total_spacer = width - total_content_width
-
-            right_spacer = (total_spacer + int(leftbar_width)) / 2
-            left_spacer = right_spacer - int(leftbar_width)
-
-        left_content_spacer.width = left_spacer
-        right_content_spacer.width = right_spacer
+    def go_store(e):
+        page.route = "/store"
         page.update()
-    
-    adjust_content_spacing(page.window_width)
-    def page_resize(e):
-        print("New page width:", page.window_width)
-        adjust_content_spacing(page.window_width)       
 
-    page.on_resize = page_resize 
+    page.on_route_change = route_change
+    page.add(ft.ElevatedButton("Go to Store", on_click=go_store))
+    page.route = "/docs" 
+    print(page.route) """
 
 
     # Change theme
@@ -99,7 +86,7 @@ def main(page: ft.Page):
             ft.Divider(height=10, thickness=0, opacity=0),
             ft.Text("Introduction", size=appbar_text_size, color=font_color),
             #ft.Divider(height=0, thickness=2, opacity=0.3),  
-            ft.TextButton("Get started"),   
+            ft.TextButton("Get started",disabled=True),   
             ft.TextButton("Requirements"),
 
             ft.Divider(height=10, thickness=0, opacity=0),
@@ -195,30 +182,36 @@ flet.app(target=main)""",
     # Add content to page
     page.add(
             ft.Row(
-                [
+                [   
                     left_bar,
-                    ft.VerticalDivider(width=1, opacity=0.3),
-                    left_content_spacer,                         
+                    ft.VerticalDivider(width=1, opacity=0.3), 
                     ft.Column([
-                            markdown,
-                            codeblock,
-                            markdown
+                            ft.ResponsiveRow([
+                                ft.Column(col={"lg": 1, "xl": 1, "xxl": 2}),
+                                ft.Column(col={"lg": 10, "xl": 8, "xxl": 6}, controls=[
+                                        markdown,
+                                        codeblock,
+                                        markdown
+                                    ]),                                
+                                ft.Column(col={"lg": 1, "xl": 3, "xxl": 4}),
+                            ]),                            
                         ], 
                         alignment=ft.MainAxisAlignment.START, 
                         expand=True,
                         scroll="auto",
-                    ),  
-                    right_content_spacer,                     
+                    ),                       
                 ],
                 expand=True,
                 vertical_alignment="start",
-
+                alignment="start"
+                
             )
     )
 
 
 # run app
 ft.app(
-    main, 
+    target=main, 
     assets_dir="assets",
-    view=ft.AppView.WEB_BROWSER)
+    view=ft.AppView.WEB_BROWSER,
+    port=5000)
