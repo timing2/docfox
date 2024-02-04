@@ -17,6 +17,7 @@ logo_width = config['top_bar']['logo_width']
 appbar_height = config['top_bar']['top_bar_height']
 menu_alignment = config['top_bar']['menu_alignment']
 appbar_text_size = config['top_bar']['top_bar_text_size']
+docs_button_text = config['top_bar']['docs_button_text']
 leftbar_width = config['general']['leftbar_width']
 max_content_width = config['general']['max_content_width']
 footer_text = config['footer']['footer_text']
@@ -34,7 +35,8 @@ def main(page: ft.Page):
 
     def adjust_content_spacing(width):
         total_content_width = int(leftbar_width) + int(max_content_width)
-        if width < total_content_width:
+        print('Content width:', total_content_width)
+        if width < total_content_width + 50:
             left_spacer = 0
             right_spacer = 0
         else:
@@ -49,7 +51,7 @@ def main(page: ft.Page):
     
     adjust_content_spacing(page.window_width)
     def page_resize(e):
-        print("New page size:", page.window_width, page.window_height)
+        print("New page width:", page.window_width)
         adjust_content_spacing(page.window_width)       
 
     page.on_resize = page_resize 
@@ -75,7 +77,7 @@ def main(page: ft.Page):
     menu = ft.Row(
         alignment=menu_alignment,
         controls=[
-            ft.TextButton(content=ft.Text(value="Documentation", size=appbar_text_size)),
+            ft.TextButton(content=ft.Text(value=docs_button_text, size=appbar_text_size)),
             ft.TextButton(content=ft.Text(value="Page 1", size=appbar_text_size)),
             ft.TextButton(content=ft.Text(value="Page 2", size=appbar_text_size)),
         ]
@@ -104,7 +106,7 @@ def main(page: ft.Page):
             ft.Text("Usage", size=appbar_text_size, color=font_color),
             #ft.Divider(height=0, thickness=2, opacity=0.3),  
             ft.TextButton("Pages"),   
-            ft.TextButton("Documentation"),
+            ft.TextButton("Docs"),
 
             ft.Divider(height=10, thickness=0, opacity=0),
             ft.Text("External links", size=appbar_text_size, color=font_color),
