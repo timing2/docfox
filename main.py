@@ -23,7 +23,44 @@ docs_button_text = config['top_bar']['docs_button_text']
 footer_text = config['footer']['footer_text']
 footer_alignment = config['footer']['footer_alignment']
 footer_height = config['footer']['footer_height']
+codeblock_copy_tooltip = config['codeblock']['codeblock_copy_tooltip']
+
 font_color = ft.colors.INVERSE_SURFACE
+
+
+# sample MD code
+sample_code = """
+import flet
+from flet import IconButton, Page, Row, TextField, icons
+
+def main(page: Page):
+    page.title = "Flet counter example"
+    page.vertical_alignment = "center"
+
+    txt_number = TextField(value="0", text_align="right", width=100)
+
+    def minus_click(e):
+        txt_number.value = str(int(txt_number.value) - 1)
+        page.update()
+
+    def plus_click(e):
+        txt_number.value = str(int(txt_number.value) + 1)
+        page.update()
+
+    page.add(
+        Row(
+            [
+                IconButton(icons.REMOVE, on_click=minus_click),
+                txt_number,
+                IconButton(icons.ADD, on_click=plus_click),
+            ],
+            alignment="center",
+        )
+    )
+
+flet.app(target=main)"""
+
+
 
 
 def main(page: ft.Page):
@@ -137,47 +174,48 @@ def main(page: ft.Page):
         ),
     )
 
+    # Codeblock
+    # Copy code function
+    def copy_code(code_to_copy):
+        def copy_text(e):
+            print("Copying:", code_to_copy)  # Debug print
+            page.set_clipboard(code_to_copy)
+        return copy_text
 
-    # code_textfield
-    codeblock = ft.TextField(
+    # Codeblock-top
+    codeblock_top = ft.Row(
+            [
+                ft.IconButton(
+                    icon=ft.icons.COPY_ROUNDED,
+                    icon_size=20,
+                    tooltip=codeblock_copy_tooltip,
+                    on_click=lambda e: copy_code(sample_code)(e)
+                ),
+            ],
+            alignment="end"
+        )
+
+    # Codeblock-text field
+    codeblock_text = ft.TextField(
         text_size = 14,
         read_only=True,
-        bgcolor="#161B22",
+        bgcolor="#0E1114",
         color="white",
+        border_radius=0,
+        border_color="#111111",
+        border_width=0,
         content_padding=10,
         multiline=True,
         disabled=False,
-        value="""
-import flet
-from flet import IconButton, Page, Row, TextField, icons
-
-def main(page: Page):
-    page.title = "Flet counter example"
-    page.vertical_alignment = "center"
-
-    txt_number = TextField(value="0", text_align="right", width=100)
-
-    def minus_click(e):
-        txt_number.value = str(int(txt_number.value) - 1)
-        page.update()
-
-    def plus_click(e):
-        txt_number.value = str(int(txt_number.value) + 1)
-        page.update()
-
-    page.add(
-        Row(
-            [
-                IconButton(icons.REMOVE, on_click=minus_click),
-                txt_number,
-                IconButton(icons.ADD, on_click=plus_click),
-            ],
-            alignment="center",
-        )
-    )
-
-flet.app(target=main)""",
+        value= sample_code,
             )
+    # Codeblock-column
+    codeblock = ft.Column([
+        codeblock_top,
+        codeblock_text
+        ],
+        spacing=0
+    )
 
     # Add content to page
     page.add(
