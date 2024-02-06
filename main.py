@@ -174,6 +174,9 @@ def main(page: ft.Page):
         ),
     )
 
+
+
+
     # Codeblock
     # Copy code function
     def copy_code(code_to_copy):
@@ -182,18 +185,33 @@ def main(page: ft.Page):
             page.set_clipboard(code_to_copy)
         return copy_text
 
-    # Codeblock-top
-    codeblock_top = ft.Row(
-            [
-                ft.IconButton(
-                    icon=ft.icons.COPY_ROUNDED,
-                    icon_size=20,
-                    tooltip=codeblock_copy_tooltip,
-                    on_click=lambda e: copy_code(sample_code)(e)
-                ),
-            ],
-            alignment="end"
-        )
+    # Codeblock-top bg= #272A2C
+    codeblock_top = ft.Container(
+        content=ft.Row(
+                [   
+                    ft.Text("Copy", size=12),
+                    ft.IconButton(
+                        icon=ft.icons.COPY_ROUNDED,
+                        icon_size=20,
+                        tooltip=codeblock_copy_tooltip,
+                        style=ft.ButtonStyle(color={"": ft.colors.LIGHT_BLUE_ACCENT}),
+                        on_click=lambda e: copy_code(sample_code)(e)
+                        ),
+                    ft.VerticalDivider(width=0)
+                ],
+                alignment="end",
+        ),
+        bgcolor="#272A2C",
+        border=ft.border.only(
+            top=ft.border.BorderSide(1, "#222222"),
+            right=ft.border.BorderSide(1, "#222222"),
+            left=ft.border.BorderSide(1, "#222222")
+            ),
+            border_radius=ft.border_radius.only(top_left=10, top_right=10)
+
+    )
+    
+        
 
     # Codeblock-text field
     codeblock_text = ft.TextField(
@@ -202,7 +220,7 @@ def main(page: ft.Page):
         bgcolor="#0E1114",
         color="white",
         border_radius=0,
-        border_color="#111111",
+        border_color="#222222",
         border_width=0,
         content_padding=10,
         multiline=True,
