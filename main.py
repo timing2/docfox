@@ -24,6 +24,12 @@ footer_text = config['footer']['footer_text']
 footer_alignment = config['footer']['footer_alignment']
 footer_height = config['footer']['footer_height']
 codeblock_copy_tooltip = config['codeblock']['codeblock_copy_tooltip']
+codeblock_top_bgcolor = config['codeblock']['codeblock_top_bgcolor']
+codeblock_copy_icon_color = config['codeblock']['codeblock_copy_icon_color']
+codeblock_body_bgcolor = config['codeblock']['codeblock_body_bgcolor']
+codeblock_text_color = config['codeblock']['codeblock_text_color']
+codeblock_border_color = config['codeblock']['codeblock_border_color']
+
 
 font_color = ft.colors.INVERSE_SURFACE
 
@@ -188,27 +194,26 @@ def main(page: ft.Page):
     # Codeblock-top bg= #272A2C
     codeblock_top = ft.Container(
         content=ft.Row(
-                [   
-                    ft.Text("Copy", size=12),
+                [
                     ft.IconButton(
                         icon=ft.icons.COPY_ROUNDED,
-                        icon_size=20,
+                        icon_size=18,
                         tooltip=codeblock_copy_tooltip,
-                        style=ft.ButtonStyle(color={"": ft.colors.LIGHT_BLUE_ACCENT}),
+                        style=ft.ButtonStyle(color=codeblock_copy_icon_color.replace('"', '')),
                         on_click=lambda e: copy_code(sample_code)(e)
                         ),
                     ft.VerticalDivider(width=0)
                 ],
-                alignment="end",
+                alignment= "end",
         ),
-        bgcolor="#272A2C",
+        padding=2,        
+        bgcolor=codeblock_top_bgcolor.replace('"', ''),
         border=ft.border.only(
-            top=ft.border.BorderSide(1, "#222222"),
-            right=ft.border.BorderSide(1, "#222222"),
-            left=ft.border.BorderSide(1, "#222222")
+            top=ft.border.BorderSide(1, codeblock_border_color.replace('"', '')),
+            right=ft.border.BorderSide(1, codeblock_border_color.replace('"', '')),
+            left=ft.border.BorderSide(1, codeblock_border_color.replace('"', ''))
             ),
             border_radius=ft.border_radius.only(top_left=10, top_right=10)
-
     )
     
         
@@ -217,10 +222,10 @@ def main(page: ft.Page):
     codeblock_text = ft.TextField(
         text_size = 14,
         read_only=True,
-        bgcolor="#0E1114",
-        color="white",
+        bgcolor=codeblock_body_bgcolor.replace('"', ''),
+        color=codeblock_text_color.replace('"', ''),
         border_radius=0,
-        border_color="#222222",
+        border_color=codeblock_border_color.replace('"', ''),
         border_width=0,
         content_padding=10,
         multiline=True,
@@ -228,11 +233,14 @@ def main(page: ft.Page):
         value= sample_code,
             )
     # Codeblock-column
-    codeblock = ft.Column([
-        codeblock_top,
-        codeblock_text
-        ],
-        spacing=0
+    codeblock_container = ft.Container(
+        content=ft.Column([
+                codeblock_top,
+                codeblock_text,
+                ],
+                spacing=0,
+                ),
+            padding=ft.padding.symmetric(vertical=20)
     )
 
     # Add content to page
@@ -246,7 +254,7 @@ def main(page: ft.Page):
                                 ft.Column(col={"lg": 1, "xl": 1, "xxl": 2}),
                                 ft.Column(col={"lg": 10, "xl": 8, "xxl": 6}, controls=[
                                         markdown,
-                                        codeblock,
+                                        codeblock_container,
                                         markdown
                                     ]),                                
                                 ft.Column(col={"lg": 1, "xl": 3, "xxl": 4}),
