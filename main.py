@@ -87,6 +87,8 @@ def main(page: ft.Page):
     print(page.route) """
 
 
+
+
     # Change theme
     def changetheme(e):
         page.theme_mode = ft.ThemeMode.DARK if page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
@@ -184,11 +186,23 @@ def main(page: ft.Page):
 
 
     # Codeblock
+    # Alert - Snackbar (Code copied)
+    page.snack_bar = ft.SnackBar(
+        content=ft.Text("Code copied with 99.9% accuracy. The other 0.1% went rogue and started writing haiku", color="#6B6B6B"),
+        bgcolor="#D9D9D9",
+        duration=1500        
+    )
+
+    def on_click(e):
+        page.snack_bar.open = True
+        page.update()
+
     # Copy code function
     def copy_code(code_to_copy):
         def copy_text(e):
             print("Copying:", code_to_copy)  # Debug print
             page.set_clipboard(code_to_copy)
+            on_click(e)
         return copy_text
 
     # Codeblock-top bg= #272A2C
