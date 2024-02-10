@@ -29,6 +29,7 @@ codeblock_copy_icon_color = config['codeblock']['codeblock_copy_icon_color']
 codeblock_body_bgcolor = config['codeblock']['codeblock_body_bgcolor']
 codeblock_text_color = config['codeblock']['codeblock_text_color']
 codeblock_border_color = config['codeblock']['codeblock_border_color']
+copied_notification_text = config['codeblock']['copied_notification_text']
 
 
 font_color = ft.colors.INVERSE_SURFACE
@@ -188,7 +189,7 @@ def main(page: ft.Page):
     # Codeblock
     # Alert - Snackbar (Code copied)
     page.snack_bar = ft.SnackBar(
-        content=ft.Text("Code copied with 99.9% accuracy. The other 0.1% went rogue and started writing haiku", color="#6B6B6B"),
+        content=ft.Text(copied_notification_text, color="#6B6B6B"),
         bgcolor="#D9D9D9",
         duration=1500        
     )
