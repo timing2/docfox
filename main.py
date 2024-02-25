@@ -1,38 +1,23 @@
 from pathlib import Path
+from core.config import Config
 import flet as ft
 
-import configparser
+# Access the singleton configuration instance from the Config class.
+config = Config.get_instance()
 
-""" Root path """
-root_path = Path(__file__).resolve().parent
-
-
-""" Config file """
-# Create a ConfigParser object
-config = configparser.ConfigParser()
-
-# Read the configuration file 
-config.read(root_path / 'settings.ini', encoding='utf-8')
-leftbar_width = config['general']['leftbar_width']
-docs_page_title = config['general']['docs_page_title']
-logo_width = config['top_bar']['logo_width']
-appbar_height = config['top_bar']['top_bar_height']
-menu_alignment = config['top_bar']['menu_alignment']
-appbar_text_size = config['top_bar']['top_bar_text_size']
-docs_button_text = config['top_bar']['docs_button_text']
-footer_text = config['footer']['footer_text']
-footer_alignment = config['footer']['footer_alignment']
-footer_height = config['footer']['footer_height']
-codeblock_copy_tooltip = config['codeblock']['codeblock_copy_tooltip']
-codeblock_top_bgcolor = config['codeblock']['codeblock_top_bgcolor']
-codeblock_copy_icon_color = config['codeblock']['codeblock_copy_icon_color']
-codeblock_body_bgcolor = config['codeblock']['codeblock_body_bgcolor']
-codeblock_text_color = config['codeblock']['codeblock_text_color']
-codeblock_border_color = config['codeblock']['codeblock_border_color']
-copied_notification_text = config['codeblock']['copied_notification_text']
-
-
+# Define a font color using Flet's predefined color scheme for better UI contrast.
+# INVERSE_SURFACE is typically used to ensure text is readable on contrasting backgrounds.
 font_color = ft.colors.INVERSE_SURFACE
+
+
+
+
+
+
+
+root_path = Path(__file__).resolve().parent # remove when adding from module
+
+
 
 
 # sample MD code
@@ -67,12 +52,12 @@ def main(page: Page):
 
 flet.app(target=main)"""
 
-
-
-
 def main(page: ft.Page):
-    page.theme_mode = ft.ThemeMode.SYSTEM
-    page.title = docs_page_title
+    # Access configuration instance and set up Flet page properties
+    config = Config.get_instance()  # Configuration access
+    page.theme_mode = ft.ThemeMode.SYSTEM  # Adapt page to system theme (light/dark)
+    page.title = config.docs_page_title  # Page title from configuration
+    font_color = ft.colors.INVERSE_SURFACE  # Contrast-enhancing font color for UI components
 
     #routing
     """ def route_change(e: ft.RouteChangeEvent): 
@@ -93,10 +78,7 @@ def main(page: ft.Page):
     # Change theme
     def changetheme(e):
         page.theme_mode = ft.ThemeMode.DARK if page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
-        #page.update()
-        # CHANGE THE ICON DARK MODE OR LIGHT MODE
         toggledarklight.selected = not toggledarklight.selected
-        # AND PAGE UPDATE FOR CHANGE STATE
         page.update() 
 
     toggledarklight = ft.IconButton(
@@ -108,19 +90,19 @@ def main(page: ft.Page):
 
     # Top bar
     menu = ft.Row(
-        alignment=menu_alignment,
+        alignment=config.menu_alignment,
         controls=[
-            ft.TextButton(content=ft.Text(value=docs_button_text, size=appbar_text_size)),
-            ft.TextButton(content=ft.Text(value="Page 1", size=appbar_text_size)),
-            ft.TextButton(content=ft.Text(value="Page 2", size=appbar_text_size)),
+            ft.TextButton(content=ft.Text(value=config.docs_button_text, size=config.appbar_text_size)),
+            ft.TextButton(content=ft.Text(value="Page 1", size=config.appbar_text_size)),
+            ft.TextButton(content=ft.Text(value="Page 2", size=config.appbar_text_size)),
         ]
     )
 
     page.appbar = ft.AppBar(
-        toolbar_height=appbar_height,
+        toolbar_height=config.appbar_height,
         leading=ft.Image(src=f"icon.png"), 
         title=menu,
-        leading_width=logo_width,        
+        leading_width=config.logo_width,        
         center_title=False,
         bgcolor=ft.colors.ON_INVERSE_SURFACE,
         actions=[toggledarklight] 
@@ -130,25 +112,25 @@ def main(page: ft.Page):
     # Left bar
     left_bar = ft.Column([
             ft.Divider(height=10, thickness=0, opacity=0),
-            ft.Text("Introduction", size=appbar_text_size, color=font_color),
+            ft.Text("Introduction", size=config.appbar_text_size, color=font_color),
             #ft.Divider(height=0, thickness=2, opacity=0.3),  
             ft.TextButton("Get started",disabled=True),   
             ft.TextButton("Requirements"),
 
             ft.Divider(height=10, thickness=0, opacity=0),
-            ft.Text("Usage", size=appbar_text_size, color=font_color),
+            ft.Text("Usage", size=config.appbar_text_size, color=font_color),
             #ft.Divider(height=0, thickness=2, opacity=0.3),  
             ft.TextButton("Pages"),   
             ft.TextButton("Docs"),
 
             ft.Divider(height=10, thickness=0, opacity=0),
-            ft.Text("External links", size=appbar_text_size, color=font_color),
+            ft.Text("External links", size=config.appbar_text_size, color=font_color),
             #ft.Divider(height=0, thickness=2, opacity=0.3),  
             ft.TextButton("Github", icon="link", url="https://github.com/timing2/docvamp", url_target="_blank"),   
             ft.TextButton("Flet", icon="link", url="https://flet.dev/docs/", url_target="_blank"),
         ],
         spacing=5,
-        width=leftbar_width, 
+        width=config.leftbar_width, 
         expand=False,
         alignment="start",
         scroll="always",
@@ -168,13 +150,13 @@ def main(page: ft.Page):
 
     # Footer
     page.bottom_appbar = ft.BottomAppBar(
-        height=footer_height,
+        height=config.footer_height,
         bgcolor=ft.colors.ON_INVERSE_SURFACE,
         content=ft.Row(
-            alignment=footer_alignment,
+            alignment=config.footer_alignment,
             controls=[
                 ft.Markdown(
-                    footer_text,
+                    config.footer_text,
                     selectable=True,
                     extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
                     on_tap_link=lambda e: page.launch_url(e.data),
@@ -189,7 +171,7 @@ def main(page: ft.Page):
     # Codeblock
     # Alert - Snackbar (Code copied)
     page.snack_bar = ft.SnackBar(
-        content=ft.Text(copied_notification_text, color="#6B6B6B"),
+        content=ft.Text(config.copied_notification_text, color="#6B6B6B"),
         bgcolor="#D9D9D9",
         duration=1500        
     )
@@ -213,8 +195,8 @@ def main(page: ft.Page):
                     ft.IconButton(
                         icon=ft.icons.COPY_ROUNDED,
                         icon_size=18,
-                        tooltip=codeblock_copy_tooltip,
-                        style=ft.ButtonStyle(color=codeblock_copy_icon_color.replace('"', '')),
+                        tooltip=config.codeblock_copy_tooltip,
+                        style=ft.ButtonStyle(color=config.codeblock_copy_icon_color.replace('"', '')),
                         on_click=lambda e: copy_code(sample_code)(e)
                         ),
                     ft.VerticalDivider(width=0)
@@ -222,11 +204,11 @@ def main(page: ft.Page):
                 alignment= "end",
         ),
         padding=2,        
-        bgcolor=codeblock_top_bgcolor.replace('"', ''),
+        bgcolor=config.codeblock_top_bgcolor.replace('"', ''),
         border=ft.border.only(
-            top=ft.border.BorderSide(1, codeblock_border_color.replace('"', '')),
-            right=ft.border.BorderSide(1, codeblock_border_color.replace('"', '')),
-            left=ft.border.BorderSide(1, codeblock_border_color.replace('"', ''))
+            top=ft.border.BorderSide(1, config.codeblock_border_color.replace('"', '')),
+            right=ft.border.BorderSide(1, config.codeblock_border_color.replace('"', '')),
+            left=ft.border.BorderSide(1, config.codeblock_border_color.replace('"', ''))
             ),
             border_radius=ft.border_radius.only(top_left=10, top_right=10)
     )
@@ -237,10 +219,10 @@ def main(page: ft.Page):
     codeblock_text = ft.TextField(
         text_size = 14,
         read_only=True,
-        bgcolor=codeblock_body_bgcolor.replace('"', ''),
-        color=codeblock_text_color.replace('"', ''),
+        bgcolor=config.codeblock_body_bgcolor.replace('"', ''),
+        color=config.codeblock_text_color.replace('"', ''),
         border_radius=0,
-        border_color=codeblock_border_color.replace('"', ''),
+        border_color=config.codeblock_border_color.replace('"', ''),
         border_width=0,
         content_padding=10,
         multiline=True,
