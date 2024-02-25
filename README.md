@@ -7,3 +7,8 @@ This project is developed and maintained in my spare time. If you find it useful
 - [PayPal](timoinglin@gmail.com)
 
 Every contribution, however big or small, is greatly appreciated!
+
+
+## Settings Configuration
+
+To customize default settings, please modify the values in `core/config.py`.

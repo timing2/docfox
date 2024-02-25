@@ -53,3 +53,20 @@ root_path = Path(__file__).resolve().parent
 content_path = root_path / 'content'
 md1_file = content_path / 'Doc' / 'Markdown example.md' """,
         )
+
+
+
+
+
+    #routing
+    """ def route_change(e: ft.RouteChangeEvent): 
+        page.add(ft.Text(f"New route: {e.route}"))
+
+    def go_store(e):
+        page.route = "/store"
+        page.update()
+
+    page.on_route_change = route_change
+    page.add(ft.ElevatedButton("Go to Store", on_click=go_store))
+    page.route = "/docs" 
+    print(page.route) """

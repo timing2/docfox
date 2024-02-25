@@ -1,113 +1,46 @@
 from pathlib import Path
 from core.config import Config
+from core.top_menu import TopMenu
 import flet as ft
-
-# Access the singleton configuration instance from the Config class.
-config = Config.get_instance()
-
-# Define a font color using Flet's predefined color scheme for better UI contrast.
-# INVERSE_SURFACE is typically used to ensure text is readable on contrasting backgrounds.
-font_color = ft.colors.INVERSE_SURFACE
-
-
-
-
-
-
 
 root_path = Path(__file__).resolve().parent # remove when adding from module
 
-
-
-
-# sample MD code
-sample_code = """
-import flet
-from flet import IconButton, Page, Row, TextField, icons
-
-def main(page: Page):
-    page.title = "Flet counter example"
-    page.vertical_alignment = "center"
-
-    txt_number = TextField(value="0", text_align="right", width=100)
-
-    def minus_click(e):
-        txt_number.value = str(int(txt_number.value) - 1)
-        page.update()
-
-    def plus_click(e):
-        txt_number.value = str(int(txt_number.value) + 1)
-        page.update()
-
-    page.add(
-        Row(
-            [
-                IconButton(icons.REMOVE, on_click=minus_click),
-                txt_number,
-                IconButton(icons.ADD, on_click=plus_click),
-            ],
-            alignment="center",
-        )
-    )
-
-flet.app(target=main)"""
+# Access the singleton configuration instance from the Config class.
+config = Config.get_instance()  # Configuration access
 
 def main(page: ft.Page):
-    # Access configuration instance and set up Flet page properties
-    config = Config.get_instance()  # Configuration access
+    # Set up Flet page properties
     page.theme_mode = ft.ThemeMode.SYSTEM  # Adapt page to system theme (light/dark)
     page.title = config.docs_page_title  # Page title from configuration
     font_color = ft.colors.INVERSE_SURFACE  # Contrast-enhancing font color for UI components
 
-    #routing
-    """ def route_change(e: ft.RouteChangeEvent): 
-        page.add(ft.Text(f"New route: {e.route}"))
-
-    def go_store(e):
-        page.route = "/store"
-        page.update()
-
-    page.on_route_change = route_change
-    page.add(ft.ElevatedButton("Go to Store", on_click=go_store))
-    page.route = "/docs" 
-    print(page.route) """
-
-
-
-
     # Change theme
-    def changetheme(e):
+    def change_theme(e):
         page.theme_mode = ft.ThemeMode.DARK if page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
         toggledarklight.selected = not toggledarklight.selected
         page.update() 
 
     toggledarklight = ft.IconButton(
-        on_click=changetheme,
+        on_click=change_theme,
         icon="NIGHTLIGHT_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "LIGHT_MODE_OUTLINED",
         selected_icon="LIGHT_MODE_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "NIGHTLIGHT_OUTLINED", 
         )
 
-
-    # Top bar
-    menu = ft.Row(
-        alignment=config.menu_alignment,
-        controls=[
-            ft.TextButton(content=ft.Text(value=config.docs_button_text, size=config.appbar_text_size)),
-            ft.TextButton(content=ft.Text(value="Page 1", size=config.appbar_text_size)),
-            ft.TextButton(content=ft.Text(value="Page 2", size=config.appbar_text_size)),
-        ]
-    )
+    # Create an instance of the TopMenu class
+    top_menu_instance = TopMenu()
 
     page.appbar = ft.AppBar(
         toolbar_height=config.appbar_height,
         leading=ft.Image(src=f"icon.png"), 
-        title=menu,
+        title=top_menu_instance.top_menu,
         leading_width=config.logo_width,        
         center_title=False,
         bgcolor=ft.colors.ON_INVERSE_SURFACE,
         actions=[toggledarklight] 
     )
 
+
+##################################### Clean from here
 
     # Left bar
     left_bar = ft.Column([
@@ -166,7 +99,37 @@ def main(page: ft.Page):
     )
 
 
+    # sample MD code
+    sample_code = """
+    import flet
+    from flet import IconButton, Page, Row, TextField, icons
 
+    def main(page: Page):
+        page.title = "Flet counter example"
+        page.vertical_alignment = "center"
+
+        txt_number = TextField(value="0", text_align="right", width=100)
+
+        def minus_click(e):
+            txt_number.value = str(int(txt_number.value) - 1)
+            page.update()
+
+        def plus_click(e):
+            txt_number.value = str(int(txt_number.value) + 1)
+            page.update()
+
+        page.add(
+            Row(
+                [
+                    IconButton(icons.REMOVE, on_click=minus_click),
+                    txt_number,
+                    IconButton(icons.ADD, on_click=plus_click),
+                ],
+                alignment="center",
+            )
+        )
+
+    flet.app(target=main)"""
 
     # Codeblock
     # Alert - Snackbar (Code copied)
@@ -227,7 +190,7 @@ def main(page: ft.Page):
         content_padding=10,
         multiline=True,
         disabled=False,
-        value= sample_code,
+        value=sample_code,
             )
     # Codeblock-column
     codeblock_container = ft.Container(
