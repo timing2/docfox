@@ -31,5 +31,6 @@ class LeftMenu:
             width=self.config.leftbar_width,
             expand=False,
             alignment="start",
-            scroll="always",
+            scroll="auto",
+            animate_size=ft.animation.Animation(200, ft.AnimationCurve.DECELERATE),
         )

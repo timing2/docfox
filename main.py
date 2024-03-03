@@ -29,7 +29,7 @@ def main(page: ft.Page):
     )
 
     # Display a snack bar notification on the page.
-    def on_click(e):
+    def open_snack_bar(e):
         
         page.snack_bar.open = True
         page.update()
@@ -39,8 +39,18 @@ def main(page: ft.Page):
         def copy_text(e):
             print("Copying:", code_to_copy)
             page.set_clipboard(code_to_copy)
-            on_click(e)
+            open_snack_bar(e)
         return copy_text
+    
+
+    def toggle_sidebar(e):        
+        e.control.selected = not e.control.selected
+        #e.control.tooltip = "Open sidebar" if e.control.selected else "Close sidebar"
+        left_menu.width = 0 if e.control.selected else config.leftbar_width
+        left_menu.scroll = None if e.control.selected else "auto"
+        left_menu.update()
+        e.control.update()
+
 
     # Create an instance of the TopMenu class
     top_navigation_menu = TopMenu()    
@@ -59,22 +69,6 @@ def main(page: ft.Page):
     left_menu = left_navigation_menu.left_menu
 
 
-##################################### Clean from here
-
-
-
-    # MD content (need to edit)
-    md_file = root_path / "documentation" / "Markdownexample.md"
-    with open(md_file, "r", encoding="utf-8") as f:
-        md1 = f.read()
-    markdown = ft.Markdown(
-            md1,
-            selectable=True,
-            extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
-            on_tap_link=lambda e: page.launch_url(e.data),
-        )
-    
-
     # Footer
     page.bottom_appbar = ft.BottomAppBar(
         height=config.footer_height,
@@ -91,6 +85,25 @@ def main(page: ft.Page):
             ]
         ),
     )
+
+
+##################################### Clean from here
+
+
+
+    # MD content (need to edit)
+    md_file = root_path / "documentation" / "Markdownexample.md"
+    with open(md_file, "r", encoding="utf-8") as f:
+        md1 = f.read()
+    markdown = ft.Markdown(
+            md1,
+            selectable=True,
+            extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
+            on_tap_link=lambda e: page.launch_url(e.data),
+        )
+    
+
+
 
 
     # sample MD code
@@ -192,7 +205,36 @@ def main(page: ft.Page):
             ft.Row(
                 [   
                     left_menu,
-                    ft.VerticalDivider(width=1, opacity=0.3), 
+                    ft.Column(
+                        [
+                            ft.Container(
+                                bgcolor="#666666",
+                                expand=True,
+                                width=1,                                
+                                padding=0,
+                                opacity=0.3
+                            ),
+                            ft.IconButton(
+                                icon=ft.icons.ARROW_BACK_IOS_ROUNDED, 
+                                selected_icon=ft.icons.ARROW_FORWARD_IOS_ROUNDED,
+                                #tooltip="Close sidebar",
+                                icon_color="#666666",
+                                selected_icon_color="#666666",
+                                opacity=0.5,
+                                on_click=toggle_sidebar
+                                ),
+                            ft.Container(
+                                bgcolor="#666666",
+                                expand=True,
+                                width=1,                                
+                                padding=0,
+                                opacity=0.3
+                            ),
+                        ],                        
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment="center",
+                        expand=False
+                    ),
                     ft.Column([
                             ft.ResponsiveRow([
                                 ft.Column(col={"lg": 1, "xl": 1, "xxl": 2}),
@@ -221,5 +263,6 @@ def main(page: ft.Page):
 ft.app(
     target=main, 
     assets_dir="assets",
-    view=ft.AppView.WEB_BROWSER,
-    port=5000)
+    #view=ft.AppView.WEB_BROWSER,
+    #port=5000
+    )
