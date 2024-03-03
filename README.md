@@ -1,4 +1,4 @@
-![Image Repository Work in Progress](https://drive.google.com/file/d/1-wpdkMxQ6h-Al85Bq_bf9O4yvRz3xVWK/view?usp=sharing "Repository Work in Progress")
+![Repository Work in Progress](https://drive.google.com/uc?export=view&id=1-wpdkMxQ6h-Al85Bq_bf9O4yvRz3xVWK "Repository Work in Progress")
 
 
 ## Settings Configuration
