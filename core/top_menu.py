@@ -3,7 +3,7 @@ import flet as ft
 
 class TopMenu:
     def __init__(self) -> None:
-        # Access the singleton instance of the configuration for consistent application settings
+        # Access the singleton instance of the configuration
         self.config = Config.get_instance()
 
         # Create a row for the top menu using the alignment specified in the configuration

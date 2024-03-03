@@ -1,73 +1,67 @@
 from pathlib import Path
 from core.config import Config
 from core.top_menu import TopMenu
+from core.left_menu import LeftMenu
 import flet as ft
 
 root_path = Path(__file__).resolve().parent # remove when adding from module
 
-# Access the singleton configuration instance from the Config class.
 config = Config.get_instance()  # Configuration access
 
 def main(page: ft.Page):
-    # Set up Flet page properties
     page.theme_mode = ft.ThemeMode.SYSTEM  # Adapt page to system theme (light/dark)
-    page.title = config.docs_page_title  # Page title from configuration
-    font_color = ft.colors.INVERSE_SURFACE  # Contrast-enhancing font color for UI components
+    page.title = config.docs_page_title  # Page title from settings
 
-    # Change theme
+    # Define a function to toggle the theme of the page between dark and light mode.
     def change_theme(e):
+        # Toggle the theme mode between DARK and LIGHT based on the current theme mode.
         page.theme_mode = ft.ThemeMode.DARK if page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
+        # Toggle the selection state of the icon button to reflect the theme change.
         toggledarklight.selected = not toggledarklight.selected
-        page.update() 
+        # Update the page to apply the new theme mode.
+        page.update()
 
+    # Create an icon button that will be used to toggle the theme between dark and light mode.
     toggledarklight = ft.IconButton(
-        on_click=change_theme,
-        icon="NIGHTLIGHT_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "LIGHT_MODE_OUTLINED",
-        selected_icon="LIGHT_MODE_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "NIGHTLIGHT_OUTLINED", 
-        )
+        on_click=change_theme,  # Assign the change_theme function to be called on click.
+        icon="NIGHTLIGHT_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "LIGHT_MODE_OUTLINED",  # Set the default icon based on the current theme mode.
+        selected_icon="LIGHT_MODE_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "NIGHTLIGHT_OUTLINED",  # Set the icon to be displayed when selected, based on the current theme mode.
+    )
+
+    # Display a snack bar notification on the page.
+    def on_click(e):
+        
+        page.snack_bar.open = True
+        page.update()
+
+    # Function to copy a given text to the clipboard and display a notification.
+    def copy_code(code_to_copy):
+        def copy_text(e):
+            print("Copying:", code_to_copy)
+            page.set_clipboard(code_to_copy)
+            on_click(e)
+        return copy_text
 
     # Create an instance of the TopMenu class
-    top_menu_instance = TopMenu()
-
+    top_navigation_menu = TopMenu()    
     page.appbar = ft.AppBar(
         toolbar_height=config.appbar_height,
         leading=ft.Image(src=f"icon.png"), 
-        title=top_menu_instance.top_menu,
+        title=top_navigation_menu.top_menu,
         leading_width=config.logo_width,        
         center_title=False,
         bgcolor=ft.colors.ON_INVERSE_SURFACE,
         actions=[toggledarklight] 
     )
 
+    # Create an instance of the LeftMenu class
+    left_navigation_menu = LeftMenu()
+    left_menu = left_navigation_menu.left_menu
+
 
 ##################################### Clean from here
 
-    # Left bar
-    left_bar = ft.Column([
-            ft.Divider(height=10, thickness=0, opacity=0),
-            ft.Text("Introduction", size=config.appbar_text_size, color=font_color),
-            #ft.Divider(height=0, thickness=2, opacity=0.3),  
-            ft.TextButton("Get started",disabled=True),   
-            ft.TextButton("Requirements"),
 
-            ft.Divider(height=10, thickness=0, opacity=0),
-            ft.Text("Usage", size=config.appbar_text_size, color=font_color),
-            #ft.Divider(height=0, thickness=2, opacity=0.3),  
-            ft.TextButton("Pages"),   
-            ft.TextButton("Docs"),
-
-            ft.Divider(height=10, thickness=0, opacity=0),
-            ft.Text("External links", size=config.appbar_text_size, color=font_color),
-            #ft.Divider(height=0, thickness=2, opacity=0.3),  
-            ft.TextButton("Github", icon="link", url="https://github.com/timing2/docvamp", url_target="_blank"),   
-            ft.TextButton("Flet", icon="link", url="https://flet.dev/docs/", url_target="_blank"),
-        ],
-        spacing=5,
-        width=config.leftbar_width, 
-        expand=False,
-        alignment="start",
-        scroll="always",
-    )
 
     # MD content (need to edit)
     md_file = root_path / "documentation" / "Markdownexample.md"
@@ -139,17 +133,7 @@ def main(page: ft.Page):
         duration=1500        
     )
 
-    def on_click(e):
-        page.snack_bar.open = True
-        page.update()
 
-    # Copy code function
-    def copy_code(code_to_copy):
-        def copy_text(e):
-            print("Copying:", code_to_copy)  # Debug print
-            page.set_clipboard(code_to_copy)
-            on_click(e)
-        return copy_text
 
     # Codeblock-top bg= #272A2C
     codeblock_top = ft.Container(
@@ -207,7 +191,7 @@ def main(page: ft.Page):
     page.add(
             ft.Row(
                 [   
-                    left_bar,
+                    left_menu,
                     ft.VerticalDivider(width=1, opacity=0.3), 
                     ft.Column([
                             ft.ResponsiveRow([
@@ -237,5 +221,5 @@ def main(page: ft.Page):
 ft.app(
     target=main, 
     assets_dir="assets",
-    view=ft.AppView.WEB_BROWSER,
+    #view=ft.AppView.WEB_BROWSER,
     port=5000)
