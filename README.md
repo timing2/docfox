@@ -1,4 +1,4 @@
-![Repository Work in Progress](https://drive.google.com/uc?export=view&id=1-wpdkMxQ6h-Al85Bq_bf9O4yvRz3xVWK "Repository Work in Progress")
+![Repository Work in Progress](https://raw.githubusercontent.com/timoinglin/flashdoc/main/wip.webp?token=GHSAT0AAAAAACNDHTIFFNL3XN4HEIIBT6HAZPEQVEQ "Repository Work in Progress")
 
 
 ## Settings Configuration
