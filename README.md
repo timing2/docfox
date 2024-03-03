@@ -1,4 +1,10 @@
-# Doc???
+![Image Repository Work in Progress](https://drive.google.com/file/d/1-wpdkMxQ6h-Al85Bq_bf9O4yvRz3xVWK/view?usp=sharing "Repository Work in Progress")
+
+
+## Settings Configuration
+
+To customize default settings, please modify the values in `core/config.py`.
+
 
 ## Support the Project
 
@@ -9,6 +15,4 @@ This project is developed and maintained in my spare time. If you find it useful
 Every contribution, however big or small, is greatly appreciated!
 
 
-## Settings Configuration
 
-To customize default settings, please modify the values in `core/config.py`.
