@@ -1,4 +1,4 @@
-![Repository Work in Progress](https://raw.githubusercontent.com/timoinglin/flashdoc/main/wip.webp?token=GHSAT0AAAAAACNDHTIFFNL3XN4HEIIBT6HAZPEQVEQ "Repository Work in Progress")
+![Repository Work in Progress](https://raw.githubusercontent.com/timoinglin/flashdoc/main/wip.webp?token=GHSAT0AAAAAACNDHTIEU6X5XJ2JTIVFIP5KZPERA3Q "Repository Work in Progress")
 
 
 ## Settings Configuration
