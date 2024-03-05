@@ -32,5 +32,5 @@ class LeftMenu:
             expand=False,
             alignment="start",
             scroll="auto",
-            animate_size=ft.animation.Animation(200, ft.AnimationCurve.DECELERATE),
+            animate_size=ft.animation.Animation(250, ft.AnimationCurve.DECELERATE),
         )
