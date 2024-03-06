@@ -9,6 +9,33 @@ class LeftMenu:
         # Initialize the left menu with its components
         self.left_menu = self._initialize_left_menu()
 
+        v_devider = ft.Container(
+                bgcolor="#666666",
+                expand=True,
+                width=1,                                
+                padding=0,
+                opacity=0.3
+            )
+
+        self.sidebar_spacer =  ft.Column(
+            [
+                v_devider,
+                ft.IconButton(
+                    icon=ft.icons.ARROW_BACK_IOS_ROUNDED, 
+                    selected_icon=ft.icons.ARROW_FORWARD_IOS_ROUNDED,
+                    #tooltip="Close sidebar",
+                    icon_color="#666666",
+                    selected_icon_color="#666666",
+                    opacity=0.5,
+                    on_click=self.toggle_sidebar
+                    ),
+                v_devider
+            ],                        
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment="center",
+            expand=False
+        )
+
     def _initialize_left_menu(self):
         # Define the text buttons and sections for the left bar
         items = [
@@ -34,3 +61,11 @@ class LeftMenu:
             scroll="auto",
             animate_size=ft.animation.Animation(250, ft.AnimationCurve.DECELERATE),
         )
+
+    def toggle_sidebar(self, e):        
+        e.control.selected = not e.control.selected
+        #e.control.tooltip = "Open sidebar" if e.control.selected else "Close sidebar"
+        self.left_menu.width = 0 if e.control.selected else self.config.leftbar_width
+        self.left_menu.scroll = None if e.control.selected else "auto"
+        self.left_menu.update()
+        e.control.update()

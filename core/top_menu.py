@@ -2,7 +2,7 @@ from core.config import Config
 import flet as ft
 
 class TopMenu:
-    def __init__(self) -> None:
+    def __init__(self, toggledarklight) -> None:
         # Access the singleton instance of the configuration
         self.config = Config.get_instance()
 
@@ -10,6 +10,16 @@ class TopMenu:
         self.top_menu = ft.Row(
             alignment=self.config.menu_alignment,
             controls=self._create_menu_controls()
+        )
+
+        self.appbar = ft.AppBar(
+            toolbar_height=self.config.appbar_height,
+            leading=ft.Image(src=f"logo.png") , 
+            title=self.top_menu,
+            leading_width=self.config.logo_width,        
+            center_title=False,
+            bgcolor=ft.colors.ON_INVERSE_SURFACE,
+            actions=[toggledarklight] 
         )
 
     def _create_menu_controls(self):
@@ -22,3 +32,5 @@ class TopMenu:
                 content=ft.Text(value=item, size=self.config.appbar_text_size)
             ) for item in menu_items
         ]
+
+

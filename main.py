@@ -2,6 +2,7 @@ from pathlib import Path
 from core.config import Config
 from core.top_menu import TopMenu
 from core.left_menu import LeftMenu
+from core.footer import Footer
 import flet as ft
 
 root_path = Path(__file__).resolve().parent # remove when adding from module
@@ -56,76 +57,18 @@ def main(page: ft.Page):
         return copy_text
     
 
-    def toggle_sidebar(e):        
-        e.control.selected = not e.control.selected
-        #e.control.tooltip = "Open sidebar" if e.control.selected else "Close sidebar"
-        left_menu.width = 0 if e.control.selected else config.leftbar_width
-        left_menu.scroll = None if e.control.selected else "auto"
-        left_menu.update()
-        e.control.update()
-
-
     # Create an instance of the TopMenu class
-    top_navigation_menu = TopMenu()    
-    page.appbar = ft.AppBar(
-        toolbar_height=config.appbar_height,
-        leading=ft.Image(src=f"logo.png") , 
-        title=top_navigation_menu.top_menu,
-        leading_width=config.logo_width,        
-        center_title=False,
-        bgcolor=ft.colors.ON_INVERSE_SURFACE,
-        actions=[toggledarklight] 
-    )
+    top_navigation_menu = TopMenu(toggledarklight) 
+    page.appbar = top_navigation_menu.appbar   
 
     # Create an instance of the LeftMenu class
     left_navigation_menu = LeftMenu()
     left_menu = left_navigation_menu.left_menu
+    sidebar_spacer = left_navigation_menu.sidebar_spacer
 
-    v_devider = ft.Container(
-                    bgcolor="#666666",
-                    expand=True,
-                    width=1,                                
-                    padding=0,
-                    opacity=0.3
-                )
-
-    # Sidebar spacer
-    sidebar_spacer =  ft.Column(
-                [
-                    v_devider,
-                    ft.IconButton(
-                        icon=ft.icons.ARROW_BACK_IOS_ROUNDED, 
-                        selected_icon=ft.icons.ARROW_FORWARD_IOS_ROUNDED,
-                        #tooltip="Close sidebar",
-                        icon_color="#666666",
-                        selected_icon_color="#666666",
-                        opacity=0.5,
-                        on_click=toggle_sidebar
-                        ),
-                    v_devider
-                ],                        
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment="center",
-                expand=False
-            )
-    
-
-    # Footer
-    page.bottom_appbar = ft.BottomAppBar(
-        height=config.footer_height,
-        bgcolor=ft.colors.ON_INVERSE_SURFACE,
-        content=ft.Row(
-            alignment=config.footer_alignment,
-            controls=[
-                ft.Markdown(
-                    config.footer_text,
-                    selectable=True,
-                    extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
-                    on_tap_link=lambda e: page.launch_url(e.data),
-                )
-            ]
-        ),
-    )
+    # Create an instance of the Footer class
+    footer = Footer(page)
+    page.bottom_appbar = footer.bottom_appbar
 
 
 ##################################### Clean from here
