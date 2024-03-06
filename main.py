@@ -3,62 +3,38 @@ from core.config import Config
 from core.top_menu import TopMenu
 from core.left_menu import LeftMenu
 from core.footer import Footer
+from core.routing import Routing
 import flet as ft
 
 root_path = Path(__file__).resolve().parent # remove when adding from module
 
-config = Config.get_instance()  # Configuration access
+config = Config.get_instance()
 
 def main(page: ft.Page):
-    page.theme_mode = ft.ThemeMode.SYSTEM  # Adapt page to system theme (light/dark)
-    page.title = config.docs_page_title  # Page title from settings
-
-    # Route change
-    def route_change(e: ft.RouteChangeEvent): 
-        print(page.route)
-        if page.route == "/":
-            left_menu.visible = True
-            sidebar_spacer.visible = True
-        else:
-            left_menu.visible = False
-            sidebar_spacer.visible = False
-        page.update()
-    page.on_route_change = route_change    
-
-
-    # Define a function to toggle the theme of the page between dark and light mode.
-    def change_theme(e):
-        # Toggle the theme mode between DARK and LIGHT based on the current theme mode.
-        page.theme_mode = ft.ThemeMode.DARK if page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
-        # Toggle the selection state of the icon button to reflect the theme change.
-        toggledarklight.selected = not toggledarklight.selected
-        # Update the page to apply the new theme mode.
-        page.update()
-
-    # Create an icon button that will be used to toggle the theme between dark and light mode.
-    toggledarklight = ft.IconButton(
-        on_click=change_theme,  # Assign the change_theme function to be called on click.
-        icon="NIGHTLIGHT_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "LIGHT_MODE_OUTLINED",  # Set the default icon based on the current theme mode.
-        selected_icon="LIGHT_MODE_OUTLINED" if page.theme_mode == ft.ThemeMode.DARK else "NIGHTLIGHT_OUTLINED",  # Set the icon to be displayed when selected, based on the current theme mode.
-    )
+    page.theme_mode = ft.ThemeMode.SYSTEM
+    page.title = config.docs_page_title
 
     # Display a snack bar notification on the page.
-    def open_snack_bar(e):
-        
+    def open_snack_bar(e):        
         page.snack_bar.open = True
         page.update()
 
     # Function to copy a given text to the clipboard and display a notification.
     def copy_code(code_to_copy):
         def copy_text(e):
-            print("Copying:", code_to_copy)
             page.set_clipboard(code_to_copy)
             open_snack_bar(e)
         return copy_text
-    
+
+    # Alert - Snackbar (Code copied)
+    page.snack_bar = ft.SnackBar(
+        content=ft.Text(config.copied_notification_text, color="#6B6B6B"),
+        bgcolor="#D9D9D9",
+        duration=1500        
+    )    
 
     # Create an instance of the TopMenu class
-    top_navigation_menu = TopMenu(toggledarklight) 
+    top_navigation_menu = TopMenu(page) 
     page.appbar = top_navigation_menu.appbar   
 
     # Create an instance of the LeftMenu class
@@ -69,6 +45,11 @@ def main(page: ft.Page):
     # Create an instance of the Footer class
     footer = Footer(page)
     page.bottom_appbar = footer.bottom_appbar
+
+
+    # Routing
+    routing = Routing(page, left_menu, sidebar_spacer)
+    page.on_route_change = routing.route_change
 
 
 ##################################### Clean from here
@@ -85,53 +66,39 @@ def main(page: ft.Page):
             extension_set=ft.MarkdownExtensionSet.GITHUB_WEB,
             on_tap_link=lambda e: page.launch_url(e.data),
         )
-    
-
-
-
 
     # sample MD code
-    sample_code = """
-    import flet
-    from flet import IconButton, Page, Row, TextField, icons
+    sample_code = """import flet
+from flet import IconButton, Page, Row, TextField, icons
 
-    def main(page: Page):
-        page.title = "Flet counter example"
-        page.vertical_alignment = "center"
+def main(page: Page):
+    page.title = "Flet counter example"
+    page.vertical_alignment = "center"
 
-        txt_number = TextField(value="0", text_align="right", width=100)
+    txt_number = TextField(value="0", text_align="right", width=100)
 
-        def minus_click(e):
-            txt_number.value = str(int(txt_number.value) - 1)
-            page.update()
+    def minus_click(e):
+        txt_number.value = str(int(txt_number.value) - 1)
+        page.update()
 
-        def plus_click(e):
-            txt_number.value = str(int(txt_number.value) + 1)
-            page.update()
+    def plus_click(e):
+        txt_number.value = str(int(txt_number.value) + 1)
+        page.update()
 
-        page.add(
-            Row(
-                [
-                    IconButton(icons.REMOVE, on_click=minus_click),
-                    txt_number,
-                    IconButton(icons.ADD, on_click=plus_click),
-                ],
-                alignment="center",
-            )
+    page.add(
+        Row(
+            [
+                IconButton(icons.REMOVE, on_click=minus_click),
+                txt_number,
+                IconButton(icons.ADD, on_click=plus_click),
+            ],
+            alignment="center",
         )
-
-    flet.app(target=main)"""
-
-    # Codeblock
-    # Alert - Snackbar (Code copied)
-    page.snack_bar = ft.SnackBar(
-        content=ft.Text(config.copied_notification_text, color="#6B6B6B"),
-        bgcolor="#D9D9D9",
-        duration=1500        
     )
 
+flet.app(target=main)"""
 
-
+    # Codeblock
     # Codeblock-top bg= #272A2C
     codeblock_top = ft.Container(
         content=ft.Row(

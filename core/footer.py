@@ -3,7 +3,6 @@ import flet as ft
 
 class Footer:
     def __init__(self, page) -> None:
-        # Access the singleton instance of the configuration
         config = Config.get_instance()
 
         self.bottom_appbar = ft.BottomAppBar(

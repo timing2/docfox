@@ -16,11 +16,11 @@ FlashDoc revolutionizes the way developers and project teams create documentatio
 
 ---
 
-![Repository Work in Progress](https://raw.githubusercontent.com/timoinglin/flashdoc/main/wip.webp?token=GHSAT0AAAAAACNDHTIEU6X5XJ2JTIVFIP5KZPERA3Q "Repository Work in Progress")
+![Repository Work in Progress](https://raw.githubusercontent.com/timoinglin/flashdoc/main/wip.webp?token=GHSAT0AAAAAACNDHTIECZRGDN7WQZ6CDWH6ZPI3K5A "Repository Work in Progress")
 
 
 ## Preview
-[![Watch the video](https://raw.githubusercontent.com/timoinglin/flashdoc/main/preview.jpg)](https://youtu.be/sM2TkFmsfS4)
+[![Watch the video](https://raw.githubusercontent.com/timoinglin/flashdoc/main/preview.jpg?token=GHSAT0AAAAAACNDHTIF2EULCFFR2VI35YEOZPI3LVQ)
 
 
 ---

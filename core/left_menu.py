@@ -3,10 +3,8 @@ import flet as ft
 
 class LeftMenu:
     def __init__(self) -> None:
-        # Access the singleton instance of the configuration
         self.config = Config.get_instance()
 
-        # Initialize the left menu with its components
         self.left_menu = self._initialize_left_menu()
 
         v_devider = ft.Container(
@@ -23,10 +21,9 @@ class LeftMenu:
                 ft.IconButton(
                     icon=ft.icons.ARROW_BACK_IOS_ROUNDED, 
                     selected_icon=ft.icons.ARROW_FORWARD_IOS_ROUNDED,
-                    #tooltip="Close sidebar",
                     icon_color="#666666",
                     selected_icon_color="#666666",
-                    opacity=0.5,
+                    opacity=0.8,
                     on_click=self.toggle_sidebar
                     ),
                 v_devider
@@ -37,16 +34,15 @@ class LeftMenu:
         )
 
     def _initialize_left_menu(self):
-        # Define the text buttons and sections for the left bar
         items = [
             ft.Text("Introduction", size=self.config.appbar_text_size),
             ft.TextButton("Get started", disabled=True),
             ft.TextButton("Requirements"),
-            ft.Divider(height=10, thickness=0, opacity=0),  # Spacing between sections
+            ft.Divider(height=10, thickness=0, opacity=0),
             ft.Text("Usage", size=self.config.appbar_text_size),
             ft.TextButton("Pages"),
             ft.TextButton("Docs"),
-            ft.Divider(height=10, thickness=0, opacity=0),  # Spacing between sections
+            ft.Divider(height=10, thickness=0, opacity=0),
             ft.Text("External links", size=self.config.appbar_text_size),
             ft.TextButton("Github", icon="link", url="https://github.com/timing2/docvamp", url_target="_blank"),
             ft.TextButton("Flet", icon="link", url="https://flet.dev/docs/", url_target="_blank"),
@@ -64,7 +60,6 @@ class LeftMenu:
 
     def toggle_sidebar(self, e):        
         e.control.selected = not e.control.selected
-        #e.control.tooltip = "Open sidebar" if e.control.selected else "Close sidebar"
         self.left_menu.width = 0 if e.control.selected else self.config.leftbar_width
         self.left_menu.scroll = None if e.control.selected else "auto"
         self.left_menu.update()
