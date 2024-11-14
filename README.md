@@ -1,43 +1,100 @@
-# FlashDoc
+# FletTest
 
-**FlashDoc: Streamlined Documentation Creation with Flet**
+Welcome to **FletTest**! 🎉 This repository was created as a playground to explore and test the [Flet framework](https://flet.dev/). It's a lightweight yet powerful project that showcases some of Flet's core features, including theming, Markdown rendering, and custom code blocks with copy functionality.
 
-FlashDoc revolutionizes the way developers and project teams create documentation. By leveraging the Python Flet framework, FlashDoc offers a straightforward approach to producing responsive documentation pages through simple markdown files. Whether your aim is to deploy on iOS, Android, macOS, Linux, Windows, or the web, FlashDoc provides the flexibility to bring your documentation to any platform effortlessly. This tool is perfect for projects, programs, or software needing an accessible, comprehensive documentation page that’s easy to build and deploy across a variety of environments.
+## Features
 
-**Key Features:**
-- **Ease of Documentation:** Craft and edit documentation effortlessly with markdown files.
-- **Responsive Design:** Ensure your documentation is accessible and looks great on any device.
-- **Wide Range of Build Options:** Deploy your documentation as an iOS app (.ipa), Android app (.apk/.aab), macOS, Linux, Windows application, or a web page.
-- **Powered by Flet:** Take advantage of the Flet framework for a seamless, efficient documentation creation process.
+### 🌗 Dark/Light Theme
+Easily switch between dark and light themes, offering a visually pleasing experience for all users.
 
-**Ideal For:** Developers and teams looking for an efficient, straightforward way to add or enhance documentation for their software, applications, or any digital projects.
+### 📄 Markdown Support
+The app reads a Markdown (`.md`) file and dynamically displays its content on the page. Perfect for documentation or content-heavy pages.
 
+### 🖥️ Custom Code Blocks
+For any code snippets:
+- **Stylish Code Blocks**: Includes its own design for displaying code snippets.
+- **Copy Button**: Quickly copy code with a single click.
+- **Customizable Colors**: The colors of the code block are fully customizable through the settings file.
 
+### 📋 Collapsible Sidebar
+The app includes a **collapsible sidebar** with smooth animations:
+- **Expand/Collapse with Animation**: Toggle the sidebar to optimize screen space while maintaining easy navigation.
+- **Customizable Width**: Adjust the sidebar width via the settings file to suit your preferences.
+
+### ⚙️ App Settings
+The app comes with a flexible `settings.ini` file where you can tweak various parameters to tailor the app to your needs. Here's a quick overview of the settings:
+
+#### General Settings
+- **Leftbar Width**: Customize the width of the sidebar.
+- **Docs Page Title**: Set your documentation page's title.
+
+#### Top Bar
+- Adjust logo size, top bar height, menu alignment, and text size.
+- Set the text for the documentation button.
+
+#### Footer
+- Fully customizable footer, supporting Markdown.
+- Adjust alignment and height of the footer text.
+
+#### Code Block Customization
+- Define colors, tooltips, and notification messages for code blocks.
+- Make your code blocks visually appealing and interactive.
+
+### 📱 Responsive Layout
+The app layout is fully responsive, ensuring it works seamlessly on devices of all sizes.
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/FletTest.git
+   ```
+2. Navigate to the project folder:
+   ```bash
+   cd FletTest
+   ```
+3. Install the dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Run the app:
+   ```bash
+   python main.py
+   ```
+
+## Customization
+
+Modify the `settings.ini` file to adjust the app's appearance and functionality according to your preferences. Here's a sample snippet of the settings file:
+
+```ini
+[general]
+leftbar_width = 200
+docs_page_title = FlashDoc 🚀 Empowering Documentation
+
+[top_bar]
+logo_width = 50
+menu_alignment = center
+
+[footer]
+footer_text = Copyright © 2024 | [Your Company](https://yourcompany.com)
+footer_alignment = center
+
+[codeblock]
+codeblock_copy_tooltip = Copy code
+copied_notification_text = Code snatched! Now chilling on your clipboard 🤣
+```
+
+## Roadmap
+
+This project was designed for testing and learning purposes, but feel free to fork or expand it with new features, such as:
+- Enhanced Markdown support.
+- More customization options.
+- Additional themes or layouts.
+
+## License
+
+This project is open-source and available under the [MIT License](LICENSE).
 
 ---
 
-![Repository Work in Progress](https://raw.githubusercontent.com/timoinglin/flashdoc/main/wip.webp?token=GHSAT0AAAAAACNDHTIECZRGDN7WQZ6CDWH6ZPI3K5A "Repository Work in Progress")
-
-
-## Preview
-[![Watch the video](https://raw.githubusercontent.com/timoinglin/flashdoc/main/preview.jpg?token=GHSAT0AAAAAACNDHTIF2EULCFFR2VI35YEOZPI3LVQ)
-
-
----
-
-
-## Settings Configuration
-
-To customize default settings, please modify the values in `core/config.py`.
-
-
-## Support the Project
-
-This project is developed and maintained in my spare time. If you find it useful and would like to show your support, consider making a donation. Your donation will help cover the costs of development, hosting, and keeping the project up-to-date.
-
-- [PayPal](https://www.paypal.com/donate/?hosted_button_id=T8UEURQKH29U2)
-
-Every contribution, however big or small, is greatly appreciated!
-
-
-
+Enjoy exploring the Flet framework, and happy coding! 😊
