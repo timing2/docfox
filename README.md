@@ -2,7 +2,7 @@
 
 Welcome to **FletTest**! 🎉 This repository was created as a playground to explore and test the [Flet framework](https://flet.dev/). It's a lightweight yet powerful project that showcases some of Flet's core features, including theming, Markdown rendering, and custom code blocks with copy functionality.
 
-![Preview](https://raw.githubusercontent.com/timoinglin/FletTest/refs/heads/main/preview.jpg?token=GHSAT0AAAAAAC2IA6MRO5RZJHFR6FWWEUOUZZWNPYA)
+![Preview](https://raw.githubusercontent.com/timoinglin/FletTest/refs/heads/main/preview2.jpg?token=GHSAT0AAAAAAC2IA6MRDR2IG4HCZPXMUUWMZZWNTTQ)
 
 
 ## Features
